@@ -1,4 +1,4 @@
-![status](https://secure.travis-ci.org/overzealous/gulp-run-sequence.png?branch=master)
+![status](https://secure.travis-ci.org/OverZealous/gulp-run-sequence.png?branch=master)
 
 gulp-run-sequence
 =======
