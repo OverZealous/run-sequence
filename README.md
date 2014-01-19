@@ -7,6 +7,8 @@ Runs a sequence of gulp tasks in the specified order.  This function is designed
 
 You can still run some of the tasks in parallel, by providing an array of task names.
 
+If the final argument is a function, it will be used as a callback after all the functions are either finished or an error has occurred.
+
 Usage
 -----
 
@@ -17,8 +19,8 @@ var gulp = require('gulp');
 var runSequence = require('gulp-run-sequence')(gulp);
 var clean = require('gulp-clean');
 
-gulp.task('build', function() {
-  runSequence('build-clean', ['build-scripts', 'build-styles'], 'build-html');
+gulp.task('build', function(cb) {
+  runSequence('build-clean', ['build-scripts', 'build-styles'], 'build-html', cb);
 });
 
 // configure build-clean, build-scripts, build-styles, build-html as you
