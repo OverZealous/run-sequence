@@ -12,11 +12,9 @@ If the final argument is a function, it will be used as a callback after all the
 Usage
 -----
 
-You must call the exported function with your gulp instance.
-
 ```javascript
 var gulp = require('gulp');
-var runSequence = require('gulp-run-sequence')(gulp);
+var runSequence = require('gulp-run-sequence');
 var clean = require('gulp-clean');
 
 gulp.task('build', function(cb) {
@@ -25,6 +23,7 @@ gulp.task('build', function(cb) {
 
 // configure build-clean, build-scripts, build-styles, build-html as you
 // wish, but make sure they either return a stream or handle the callback
+// Example:
 
 gulp.task('build-clean', function() {
 	return gulp.src('build').pipe(clean());
