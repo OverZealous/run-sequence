@@ -5,6 +5,25 @@
 var colors = require('chalk');
 var gulp = require('gulp');
 
+var verifyTaskSets = function(taskSets, skipArrays) {
+	taskSets.forEach(function(t, i) {
+		var isTask = typeof t === "string",
+			isArray = !skipArrays && Array.isArray(t);
+		if(!isTask && !isArray) {
+			throw new Error("Task "+t+" is not a valid task string.");
+		}
+		if(isTask && !gulp.hasTask(t)) {
+			throw new Error("Task "+t+" is not configured as a task on gulp.");
+		}
+		if(isArray) {
+			if(t.length === 0) {
+				throw new Error("An empty array was provided as a task set");
+			}
+			verifyTaskSets(t, true);
+		}
+	})
+}
+
 module.exports = function() {
 	var taskSets = Array.prototype.slice.call(arguments),
 		callBack = typeof taskSets[taskSets.length-1] === 'function' ? taskSets.pop() : false,
@@ -42,6 +61,11 @@ module.exports = function() {
 				finish();
 			}
 		};
+	
+	if(taskSets.length === 0) {
+		throw new Error('No tasks were provided to gulp-run-sequence');
+	}
+	verifyTaskSets(taskSets);
 	
 	gulp.on('task_stop', onTaskEnd);
 	gulp.on('task_err', onError);
