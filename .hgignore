@@ -1,0 +1,9 @@
+syntax: glob
+.DS_Store
+*.log
+node_modules
+build
+*.node
+components
+*.orig
+.idea/workspace.xml
