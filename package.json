@@ -1,7 +1,7 @@
 {
   "name": "gulp-run-sequence",
   "description": "Run a series of dependent gulp tasks in order",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "homepage": "https://github.com/OverZealous/gulp-run-sequence",
   "repository": {
     "type": "git",
@@ -13,16 +13,18 @@
   },
   "main": "./index.js",
   "keywords": [
-    "gulpplugin"
+    "gulpplugin", "pipe", "sequence"
   ],
   "dependencies": {
     "chalk": "*"
   },
   "devDependencies": {
-    
+    "gulp": "*",
+	"mocha": "*",
+	"should": "*"
   },
   "scripts": {
-    
+    "test": "mocha --reporter spec"
   },
   "engines": {
     "node": ">= 0.8.0"
@@ -38,6 +40,6 @@
   "bugs": {
     "url": "https://github.com/OverZealous/gulp-run-sequence/issues"
   },
-  "_id": "gulp-run-sequence@0.3.0",
+  "_id": "gulp-run-sequence@0.3.1",
   "_from": "gulp-run-sequence@*"
 }
