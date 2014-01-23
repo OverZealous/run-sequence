@@ -6,7 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Node.js Dependencies for gulp-run-sequence" level="project" />
+    <orderEntry type="library" name="Node.js Dependencies for run-sequence" level="project" />
   </component>
 </module>
 

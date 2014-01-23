@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Node.js Dependencies for gulp-run-sequence" type="javaScript">
+  <library name="Node.js Dependencies for run-sequence" type="javaScript">
     <properties>
       <sourceFilesUrls>
         <item url="file://$PROJECT_DIR$/node_modules" />

@@ -1,6 +1,6 @@
-![status](https://secure.travis-ci.org/OverZealous/gulp-run-sequence.png?branch=master)
+![status](https://secure.travis-ci.org/OverZealous/run-sequence.png?branch=master)
 
-gulp-run-sequence
+run-sequence
 =======
 
 Runs a sequence of gulp tasks in the specified order.  This function is designed to solve the situation where you have defined run-order, but choose not to or cannot use dependencies.
@@ -14,7 +14,7 @@ Usage
 
 ```javascript
 var gulp = require('gulp');
-var runSequence = require('gulp-run-sequence');
+var runSequence = require('run-sequence');
 var clean = require('gulp-clean');
 
 gulp.task('build', function(cb) {

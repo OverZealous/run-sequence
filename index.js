@@ -63,7 +63,7 @@ module.exports = function() {
 		};
 	
 	if(taskSets.length === 0) {
-		throw new Error('No tasks were provided to gulp-run-sequence');
+		throw new Error('No tasks were provided to run-sequence');
 	}
 	verifyTaskSets(taskSets);
 	
