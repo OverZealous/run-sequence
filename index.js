@@ -56,7 +56,7 @@ module.exports = function() {
 					command = [command];
 				}
 				currentTaskSet = command;
-				gulp.run.apply(gulp, command);
+				gulp.start.apply(gulp, command);
 			} else {
 				finish();
 			}
