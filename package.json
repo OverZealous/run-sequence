@@ -1,7 +1,7 @@
 {
   "name": "run-sequence",
   "description": "Run a series of dependent gulp tasks in order",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "homepage": "https://github.com/OverZealous/run-sequence",
   "repository": {
     "type": "git",
@@ -16,15 +16,19 @@
   },
   "main": "./index.js",
   "keywords": [
-    "gulpfriendly", "pipe", "sequence", "gulp", "orchestrator"
+    "gulpfriendly",
+    "pipe",
+    "sequence",
+    "gulp",
+    "orchestrator"
   ],
   "dependencies": {
     "chalk": "*"
   },
   "devDependencies": {
     "gulp": "*",
-	"mocha": "*",
-	"should": "*"
+    "mocha": "*",
+    "should": "*"
   },
   "scripts": {
     "test": "mocha --reporter spec"
