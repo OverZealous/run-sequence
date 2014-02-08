@@ -28,11 +28,8 @@ function verifyTaskSets(taskSets, skipArrays) {
 }
 
 function runSequence() {
-	var taskSets = Array.prototype.slice.call(arguments);
-	
-	verifyTaskSets(taskSets);
-	
-	var callBack = typeof taskSets[taskSets.length-1] === 'function' ? taskSets.pop() : false,
+	var taskSets = Array.prototype.slice.call(arguments),
+		callBack = typeof taskSets[taskSets.length-1] === 'function' ? taskSets.pop() : false,
 		currentTaskSet,
 		
 		finish = function(err) {
@@ -70,6 +67,8 @@ function runSequence() {
 				finish();
 			}
 		};
+	
+	verifyTaskSets(taskSets);
 	
 	gulp.on('task_stop', onTaskEnd);
 	gulp.on('task_err', onError);

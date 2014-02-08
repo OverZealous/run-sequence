@@ -24,6 +24,7 @@ describe('runSequence', function() {
 			};
 			task.shouldPause = false;
 			task.counter = -1;
+			//noinspection ReservedWordAsName
 			task.continue = function(err) {
 				if(task.cb) {
 					task.counter = getCounter();
@@ -31,12 +32,12 @@ describe('runSequence', function() {
 					delete task.cb;
 					cb(err);
 				}
-			}
+			};
 			task.reset = function() {
 				task.shouldPause = false;
 				task.counter = -1;
 				delete task.cb;
-			}
+			};
 			return task;
 		};
 	
@@ -89,6 +90,19 @@ describe('runSequence', function() {
 			task3.counter.should.eql(2);
 			task4.counter.should.eql(3);
 		});
+		it('should handle the callback', function() {
+			var wasCalled = false;
+			runSequence('task1', 'task4', function(err) {
+				should.equal(err, undefined);
+				wasCalled = true;
+			});
+			task1.counter.should.eql(1);
+			task2.counter.should.eql(-1);
+			task3.counter.should.eql(2);
+			task4.counter.should.eql(3);
+			//noinspection BadExpressionStatementJS
+			wasCalled.should.be.true;
+		})
 	});
 	
 	describe('Asynchronous Tasks', function() {
@@ -96,7 +110,7 @@ describe('runSequence', function() {
 			task1.shouldPause = true;
 			runSequence('task1');
 			task1.counter.should.eql(-1);
-			task1.continue()
+			task1.continue();
 			task1.counter.should.eql(1);
 		});
 		it('should run multiple tasks', function() {
@@ -105,10 +119,10 @@ describe('runSequence', function() {
 			runSequence('task1', 'task2');
 			task1.counter.should.eql(-1);
 			task2.counter.should.eql(-1);
-			task1.continue()
+			task1.continue();
 			task1.counter.should.eql(1);
 			task2.counter.should.eql(-1);
-			task2.continue()
+			task2.continue();
 			task2.counter.should.eql(2);
 		});
 		it('should run simultaneous tasks', function() {
@@ -126,7 +140,7 @@ describe('runSequence', function() {
 			runSequence('task4');
 			task3.counter.should.eql(-1);
 			task4.counter.should.eql(-1);
-			task3.continue()
+			task3.continue();
 			task3.counter.should.eql(1);
 			task4.counter.should.eql(2);
 		});
