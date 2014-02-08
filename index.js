@@ -2,11 +2,14 @@
 
 "use strict";
 
-var colors = require('chalk');
-var gulp = require('gulp');
+var gulp = require('gulp'),
+	colors = require('chalk');
 
-var verifyTaskSets = function(taskSets, skipArrays) {
-	taskSets.forEach(function(t, i) {
+function verifyTaskSets(taskSets, skipArrays) {
+	if(taskSets.length === 0) {
+		throw new Error('No tasks were provided to run-sequence');
+	}
+	taskSets.forEach(function(t) {
 		var isTask = typeof t === "string",
 			isArray = !skipArrays && Array.isArray(t);
 		if(!isTask && !isArray) {
@@ -21,13 +24,17 @@ var verifyTaskSets = function(taskSets, skipArrays) {
 			}
 			verifyTaskSets(t, true);
 		}
-	})
+	});
 }
 
-module.exports = function() {
-	var taskSets = Array.prototype.slice.call(arguments),
-		callBack = typeof taskSets[taskSets.length-1] === 'function' ? taskSets.pop() : false,
+function runSequence() {
+	var taskSets = Array.prototype.slice.call(arguments);
+	
+	verifyTaskSets(taskSets);
+	
+	var callBack = typeof taskSets[taskSets.length-1] === 'function' ? taskSets.pop() : false,
 		currentTaskSet,
+		
 		finish = function(err) {
 			gulp.removeListener('task_stop', onTaskEnd);
 			gulp.removeListener('task_err', onError);
@@ -37,6 +44,7 @@ module.exports = function() {
 				console.log(colors.red('Error running task sequence:'), err);
 			}
 		},
+		
 		onError = function(err) {
 			finish(err);
 		},
@@ -49,6 +57,7 @@ module.exports = function() {
 				runNextSet();
 			}
 		},
+		
 		runNextSet = function() {
 			if(taskSets.length) {
 				var command = taskSets.shift();
@@ -62,14 +71,10 @@ module.exports = function() {
 			}
 		};
 	
-	if(taskSets.length === 0) {
-		throw new Error('No tasks were provided to run-sequence');
-	}
-	verifyTaskSets(taskSets);
-	
 	gulp.on('task_stop', onTaskEnd);
 	gulp.on('task_err', onError);
 	
 	runNextSet();
-};
+}
 
+module.exports = runSequence;
