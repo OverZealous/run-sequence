@@ -35,7 +35,7 @@ var clean = require('gulp-clean');
 // * build-html
 // * Finally call the callback function
 gulp.task('build', function(callback) {
-  runSequence('build-clean',
+    return runSequence('build-clean',
               ['build-scripts', 'build-styles'],
               'build-html',
               callback);
