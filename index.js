@@ -37,11 +37,7 @@ function runSequence() {
 		finish = function(err) {
 			gulp.removeListener('task_stop', onTaskEnd);
 			gulp.removeListener('task_err', onError);
-			if(callBack) {
-				callBack(err);
-			} else if(err) {
-				console.log(colors.red('Error running task sequence:'), err);
-			}
+            deferred.resolve(err);
 		},
 		
 		onError = function(err) {
@@ -67,7 +63,6 @@ function runSequence() {
 				gulp.start.apply(gulp, command);
 			} else {
 				finish();
-                deferred.resolve();
 			}
 		};
 	
