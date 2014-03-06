@@ -3,7 +3,8 @@
 "use strict";
 
 var gulp = require('gulp'),
-	colors = require('chalk');
+	colors = require('chalk'),
+    Q = require('q');
 
 function verifyTaskSets(taskSets, skipArrays) {
 	if(taskSets.length === 0) {
@@ -28,18 +29,19 @@ function verifyTaskSets(taskSets, skipArrays) {
 }
 
 function runSequence() {
-	var taskSets = Array.prototype.slice.call(arguments),
+	var deferred = Q.defer(),
+        taskSets = Array.prototype.slice.call(arguments),
 		callBack = typeof taskSets[taskSets.length-1] === 'function' ? taskSets.pop() : false,
 		currentTaskSet,
 		
 		finish = function(err) {
 			gulp.removeListener('task_stop', onTaskEnd);
-			gulp.removeListener('task_err', onError);
-			if(callBack) {
-				callBack(err);
-			} else if(err) {
-				console.log(colors.red('Error running task sequence:'), err);
-			}
+			gulp.removeListener('task_err', onError);            
+            if (err) {
+                deferred.reject(err);
+            } else {
+                deferred.resolve();
+            }
 		},
 		
 		onError = function(err) {
@@ -74,6 +76,8 @@ function runSequence() {
 	gulp.on('task_err', onError);
 	
 	runNextSet();
+
+    return deferred.promise;
 }
 
 module.exports = runSequence;

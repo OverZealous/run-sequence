@@ -33,12 +33,10 @@ var clean = require('gulp-clean');
 // * build-clean
 // * build-scripts and build-styles in parallel
 // * build-html
-// * Finally call the callback function
-gulp.task('build', function(callback) {
-  runSequence('build-clean',
+gulp.task('build', function() {
+    return runSequence('build-clean',
               ['build-scripts', 'build-styles'],
-              'build-html',
-              callback);
+              'build-html');
 });
 
 // configure build-clean, build-scripts, build-styles, build-html as you
