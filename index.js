@@ -36,8 +36,12 @@ function runSequence() {
 		
 		finish = function(err) {
 			gulp.removeListener('task_stop', onTaskEnd);
-			gulp.removeListener('task_err', onError);
-            deferred.resolve(err);
+			gulp.removeListener('task_err', onError);            
+            if (err) {
+                deferred.reject(err);
+            } else {
+                deferred.resolve();
+            }
 		},
 		
 		onError = function(err) {

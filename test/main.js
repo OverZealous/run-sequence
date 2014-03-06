@@ -90,18 +90,15 @@ describe('runSequence', function() {
 			task3.counter.should.eql(2);
 			task4.counter.should.eql(3);
 		});
-		it('should handle the callback', function() {
-			var wasCalled = false;
-			runSequence('task1', 'task4', function(err) {
-				should.equal(err, undefined);
-				wasCalled = true;
-			});
-			task1.counter.should.eql(1);
-			task2.counter.should.eql(-1);
-			task3.counter.should.eql(2);
-			task4.counter.should.eql(3);
-			//noinspection BadExpressionStatementJS
-			wasCalled.should.be.true;
+		it('should resolve the promise', function(done) {
+			runSequence('task1', 'task4')
+                .then(function() {
+                    task1.counter.should.eql(1);
+                    task2.counter.should.eql(-1);
+                    task3.counter.should.eql(2);
+                    task4.counter.should.eql(3);
+                    done();
+               });
 		})
 	});
 	
