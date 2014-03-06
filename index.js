@@ -3,7 +3,8 @@
 "use strict";
 
 var gulp = require('gulp'),
-	colors = require('chalk');
+	colors = require('chalk'),
+    Q = require('q');
 
 function verifyTaskSets(taskSets, skipArrays) {
 	if(taskSets.length === 0) {
@@ -28,7 +29,8 @@ function verifyTaskSets(taskSets, skipArrays) {
 }
 
 function runSequence() {
-	var taskSets = Array.prototype.slice.call(arguments),
+	var deferred = Q.defer(),
+        taskSets = Array.prototype.slice.call(arguments),
 		callBack = typeof taskSets[taskSets.length-1] === 'function' ? taskSets.pop() : false,
 		currentTaskSet,
 		
@@ -65,6 +67,7 @@ function runSequence() {
 				gulp.start.apply(gulp, command);
 			} else {
 				finish();
+                deferred.resolve();
 			}
 		};
 	
@@ -74,6 +77,8 @@ function runSequence() {
 	gulp.on('task_err', onError);
 	
 	runNextSet();
+
+    return deferred.promise;
 }
 
 module.exports = runSequence;
