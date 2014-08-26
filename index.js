@@ -2,10 +2,10 @@
 
 "use strict";
 
-var gulp = require('gulp'),
+var g = require('gulp'),
 	colors = require('chalk');
 
-function verifyTaskSets(taskSets, skipArrays) {
+function verifyTaskSets(gulp, taskSets, skipArrays) {
 	if(taskSets.length === 0) {
 		throw new Error('No tasks were provided to run-sequence');
 	}
@@ -22,16 +22,17 @@ function verifyTaskSets(taskSets, skipArrays) {
 			if(t.length === 0) {
 				throw new Error("An empty array was provided as a task set");
 			}
-			verifyTaskSets(t, true);
+			verifyTaskSets(gulp, t, true);
 		}
 	});
 }
 
 function runSequence() {
 	var taskSets = Array.prototype.slice.call(arguments),
+		gulp = typeof taskSets[0] === 'object' && !Array.isArray(taskSets[0]) ? taskSets.shift() : g,
 		callBack = typeof taskSets[taskSets.length-1] === 'function' ? taskSets.pop() : false,
 		currentTaskSet,
-		
+
 		finish = function(err) {
 			gulp.removeListener('task_stop', onTaskEnd);
 			gulp.removeListener('task_err', onError);
@@ -41,7 +42,7 @@ function runSequence() {
 				console.log(colors.red('Error running task sequence:'), err);
 			}
 		},
-		
+
 		onError = function(err) {
 			finish(err);
 		},
@@ -54,7 +55,7 @@ function runSequence() {
 				runNextSet();
 			}
 		},
-		
+
 		runNextSet = function() {
 			if(taskSets.length) {
 				var command = taskSets.shift();
@@ -67,12 +68,12 @@ function runSequence() {
 				finish();
 			}
 		};
-	
-	verifyTaskSets(taskSets);
-	
+
+	verifyTaskSets(gulp, taskSets);
+
 	gulp.on('task_stop', onTaskEnd);
 	gulp.on('task_err', onError);
-	
+
 	runNextSet();
 }
 
