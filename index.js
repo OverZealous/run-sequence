@@ -2,10 +2,9 @@
 
 "use strict";
 
-var gulp = require('gulp'),
-	colors = require('chalk');
+var colors = require('chalk');
 
-function verifyTaskSets(taskSets, skipArrays) {
+function verifyTaskSets(gulp, taskSets, skipArrays) {
 	if(taskSets.length === 0) {
 		throw new Error('No tasks were provided to run-sequence');
 	}
@@ -16,19 +15,19 @@ function verifyTaskSets(taskSets, skipArrays) {
 			throw new Error("Task "+t+" is not a valid task string.");
 		}
 		if(isTask && !gulp.hasTask(t)) {
-			throw new Error("Task "+t+" is not configured as a task on gulp.");
+			throw new Error("Task "+t+" is not configured as a task on gulp.  If this is a submodule, you may need to use require('run-sequence').use(gulp).");
 		}
 		if(isArray) {
 			if(t.length === 0) {
 				throw new Error("An empty array was provided as a task set");
 			}
-			verifyTaskSets(t, true);
+			verifyTaskSets(gulp, t, true);
 		}
 	});
 }
 
-function runSequence() {
-	var taskSets = Array.prototype.slice.call(arguments),
+function runSequence(gulp) {
+	var taskSets = Array.prototype.slice.call(arguments, 1),
 		callBack = typeof taskSets[taskSets.length-1] === 'function' ? taskSets.pop() : false,
 		currentTaskSet,
 		
@@ -68,7 +67,7 @@ function runSequence() {
 			}
 		};
 	
-	verifyTaskSets(taskSets);
+	verifyTaskSets(gulp, taskSets);
 	
 	gulp.on('task_stop', onTaskEnd);
 	gulp.on('task_err', onError);
@@ -76,4 +75,7 @@ function runSequence() {
 	runNextSet();
 }
 
-module.exports = runSequence;
+module.exports = runSequence.bind(null, require('gulp'));
+module.exports.use = function(gulp) {
+	return runSequence.bind(null, gulp);
+};

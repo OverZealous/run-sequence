@@ -58,6 +58,21 @@ gulp.task('build-scripts', function() {
 });
 ```
 
+### Using within gulp submodules
+
+If you have a complex gulp setup with your tasks split up across different files, you may get the error that `run-sequence` is unable to find your tasks.  In this case, you can configure `run-sequence` to look at the gulp within the submodule, like so:
+
+```js
+// submodule tasks/mygulptask.js
+
+var gulp = require('gulp'), // might be a different instance than the toplevel one
+	// this uses the gulp you provide
+    runSequence = require('run-sequence').use(gulp);
+    
+    // ...and then use normally
+    runSequence('subtask1', 'subtask2');
+```
+
 ## Help Support This Project
 
 If you'd like to support this and other OverZealous Creations (Phil DeJarnett) projects, [donate via Gittip][gittip-url]!
