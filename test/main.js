@@ -151,23 +151,33 @@ describe('runSequence', function() {
 		});
 	});
 
+	function shouldNotRunAnything() {
+		task1.counter.should.eql(-1);
+		task2.counter.should.eql(-1);
+		task3.counter.should.eql(-1);
+		task4.counter.should.eql(-1);
+	}
+
 	describe('Error Handling', function() {
 		it('should error if no tasks are provided', function() {
 			(function() {
 				runSequence();
-			}).should.throw();
+			}).should.throw(/no tasks/i);
+			shouldNotRunAnything();
 		});
 
 		it('should error if a non-string task is provided', function() {
 			(function() {
 				runSequence(null);
-			}).should.throw();
+			}).should.throw(/not a valid task string/i);
+			shouldNotRunAnything();
 		});
 
 		it('should error if a a non-string task is provided as part of a task-list', function() {
 			(function() {
 				runSequence([true]);
-			}).should.throw();
+			}).should.throw(/not a valid task string/i);
+			shouldNotRunAnything();
 		});
 
 		it('should error if an empty task-list is provided', function() {
@@ -176,19 +186,36 @@ describe('runSequence', function() {
 			}).should.throw();
 			(function() {
 				runSequence('task1', []);
-			}).should.throw();
+			}).should.throw(/empty array/i);
+			shouldNotRunAnything();
 		});
 
 		it('should error if an undefined task is provided', function() {
 			(function() {
 				runSequence('task1', 'hello world');
-			}).should.throw();
+			}).should.throw(/not configured/i);
+			shouldNotRunAnything();
 		});
 
 		it('should error if an undefined task is provided as part of a task-list', function() {
 			(function() {
 				runSequence(['task1', 'hello world']);
-			}).should.throw();
+			}).should.throw(/not configured/i);
+			shouldNotRunAnything();
+		});
+
+		it('should error if a task is duplicated', function() {
+			(function() {
+				runSequence(['task1', 'task1'], 'task2');
+			}).should.throw(/more than once/i);
+			shouldNotRunAnything();
+		});
+
+		it('should error if a task is duplicated across tasks-lists', function() {
+			(function() {
+				runSequence(['task1', 'task2'], 'task1');
+			}).should.throw(/more than once/i);
+			shouldNotRunAnything();
 		});
 	});
 

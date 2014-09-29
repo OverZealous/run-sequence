@@ -14,6 +14,19 @@ Each argument to `run-sequence` is run in order.  This works by listening to the
 
 If the final argument is a function, it will be used as a callback after all the functions are either finished or an error has occurred.
 
+## Possible Breaking Change in version 1.0.0
+
+In version 1.0 I've added a check that prevents the same task from showing up within any sequence.  This is to help reduce typo errors, as well as prevent the [silent exit bug when the same task occurred twice in a parallel sequence](https://github.com/OverZealous/run-sequence/issues/13).  The sequence will now fail immediately during the validation stage.
+
+If this breaking change affects you, you'll need to take one of several actions:
+
+1. Remove duplicate tasks if they are a mistake.
+2. Filter unneeded duplicate tasks before passing them to `run-sequence`.
+3. Rewrite your tasks or wrap your tasks within functions that can be called multiple times if for some reason you rely on this functionality.
+4. Continue using `run-sequence` version 0.3.7 if it was working for you.
+
+[I welcome feedback](https://github.com/OverZealous/run-sequence/issues) if this change is a problem for your setup!
+
 ## Usage
 
 First, install `run-sequence` as a development dependency:

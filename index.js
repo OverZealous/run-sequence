@@ -4,10 +4,11 @@
 
 var colors = require('chalk');
 
-function verifyTaskSets(gulp, taskSets, skipArrays) {
+function verifyTaskSets(gulp, taskSets, skipArrays, foundTasks) {
 	if(taskSets.length === 0) {
 		throw new Error('No tasks were provided to run-sequence');
 	}
+	foundTasks = foundTasks || {};
 	taskSets.forEach(function(t) {
 		var isTask = typeof t === "string",
 			isArray = !skipArrays && Array.isArray(t);
@@ -17,11 +18,17 @@ function verifyTaskSets(gulp, taskSets, skipArrays) {
 		if(isTask && !gulp.hasTask(t)) {
 			throw new Error("Task "+t+" is not configured as a task on gulp.  If this is a submodule, you may need to use require('run-sequence').use(gulp).");
 		}
+		if(isTask) {
+			if(foundTasks[t]) {
+				throw new Error("Task "+t+" is listed more than once. This is probably a typo.");
+			}
+			foundTasks[t] = true;
+		}
 		if(isArray) {
 			if(t.length === 0) {
 				throw new Error("An empty array was provided as a task set");
 			}
-			verifyTaskSets(gulp, t, true);
+			verifyTaskSets(gulp, t, true, foundTasks);
 		}
 	});
 }
@@ -30,7 +37,7 @@ function runSequence(gulp) {
 	var taskSets = Array.prototype.slice.call(arguments, 1),
 		callBack = typeof taskSets[taskSets.length-1] === 'function' ? taskSets.pop() : false,
 		currentTaskSet,
-		
+
 		finish = function(err) {
 			gulp.removeListener('task_stop', onTaskEnd);
 			gulp.removeListener('task_err', onError);
@@ -40,7 +47,7 @@ function runSequence(gulp) {
 				console.log(colors.red('Error running task sequence:'), err);
 			}
 		},
-		
+
 		onError = function(err) {
 			finish(err);
 		},
@@ -53,7 +60,7 @@ function runSequence(gulp) {
 				runNextSet();
 			}
 		},
-		
+
 		runNextSet = function() {
 			if(taskSets.length) {
 				var command = taskSets.shift();
@@ -66,12 +73,12 @@ function runSequence(gulp) {
 				finish();
 			}
 		};
-	
+
 	verifyTaskSets(gulp, taskSets);
-	
+
 	gulp.on('task_stop', onTaskEnd);
 	gulp.on('task_err', onError);
-	
+
 	runNextSet();
 }
 
