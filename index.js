@@ -4,11 +4,11 @@
 
 var colors = require('chalk');
 
-function verifyTaskSets(gulp, taskSets, skipArrays, foundTasks) {
+function verifyTaskSets(gulp, taskSets, skipArrays) {
 	if(taskSets.length === 0) {
 		throw new Error('No tasks were provided to run-sequence');
 	}
-	foundTasks = foundTasks || {};
+	var foundTasks = {};
 	taskSets.forEach(function(t) {
 		var isTask = typeof t === "string",
 			isArray = !skipArrays && Array.isArray(t);
@@ -18,7 +18,7 @@ function verifyTaskSets(gulp, taskSets, skipArrays, foundTasks) {
 		if(isTask && !gulp.hasTask(t)) {
 			throw new Error("Task "+t+" is not configured as a task on gulp.  If this is a submodule, you may need to use require('run-sequence').use(gulp).");
 		}
-		if(isTask) {
+		if(skipArrays && isTask) {
 			if(foundTasks[t]) {
 				throw new Error("Task "+t+" is listed more than once. This is probably a typo.");
 			}

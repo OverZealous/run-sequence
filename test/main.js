@@ -151,6 +151,32 @@ describe('runSequence', function() {
 		});
 	});
 
+	describe('Duplicate Tasks', function() {
+		it('should not error if a task is duplicated across tasks-lists', function() {
+			(function() {
+				runSequence(['task1', 'task2'], ['task3', 'task1']);
+			}).should.not.throw();
+			task1.counter.should.eql(4);
+			task2.counter.should.eql(2);
+			task3.counter.should.eql(3);
+		});
+
+		it('should not error if a task is duplicated serially', function() {
+			(function() {
+				runSequence('task1', 'task2', 'task1');
+			}).should.not.throw();
+			task1.counter.should.eql(3);
+			task2.counter.should.eql(2);
+		});
+
+		it('should error if a task is duplicated within a parallel array', function() {
+			(function() {
+				runSequence(['task1', 'task1'], 'task2');
+			}).should.throw(/more than once/i);
+			shouldNotRunAnything();
+		});
+	});
+
 	function shouldNotRunAnything() {
 		task1.counter.should.eql(-1);
 		task2.counter.should.eql(-1);
@@ -201,20 +227,6 @@ describe('runSequence', function() {
 			(function() {
 				runSequence(['task1', 'hello world']);
 			}).should.throw(/not configured/i);
-			shouldNotRunAnything();
-		});
-
-		it('should error if a task is duplicated', function() {
-			(function() {
-				runSequence(['task1', 'task1'], 'task2');
-			}).should.throw(/more than once/i);
-			shouldNotRunAnything();
-		});
-
-		it('should error if a task is duplicated across tasks-lists', function() {
-			(function() {
-				runSequence(['task1', 'task2'], 'task1');
-			}).should.throw(/more than once/i);
 			shouldNotRunAnything();
 		});
 	});
