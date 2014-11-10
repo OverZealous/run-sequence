@@ -34,6 +34,8 @@ function verifyTaskSets(gulp, taskSets, skipArrays) {
 }
 
 function runSequence(gulp) {
+	gulp = gulp || require('gulp');
+
 	var taskSets = Array.prototype.slice.call(arguments, 1),
 		callBack = typeof taskSets[taskSets.length-1] === 'function' ? taskSets.pop() : false,
 		currentTaskSet,
@@ -82,7 +84,9 @@ function runSequence(gulp) {
 	runNextSet();
 }
 
-module.exports = runSequence.bind(null, require('gulp'));
+
+module.exports = runSequence;
+
 module.exports.use = function(gulp) {
 	return runSequence.bind(null, gulp);
 };
