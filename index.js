@@ -82,7 +82,7 @@ function runSequence(gulp) {
 	runNextSet();
 }
 
-module.exports = runSequence.bind(null, require('gulp'));
+module.exports = runSequence.bind(null, require.resolve('gulp'));
 module.exports.use = function(gulp) {
 	return runSequence.bind(null, gulp);
 };
