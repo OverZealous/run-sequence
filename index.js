@@ -14,12 +14,10 @@ module.exports = RunSequence;
  * @constructor
  */
 function RunSequence(gulp) {
-	var self = this;
-
 	if(!(this instanceof RunSequence))
 		return new RunSequence(gulp);
 
-	self._gulp = gulp || require('gulp');
+	this._gulp = gulp || require('gulp');
 }
 
 
@@ -28,11 +26,14 @@ function RunSequence(gulp) {
  */
 RunSequence.prototype.run = function() {
 	var self = this,
-		taskSets = Array.prototype.slice.call(arguments, 1),
+		taskSets = Array.prototype.slice.call(arguments),
 		callBack = typeof taskSets[taskSets.length - 1] === 'function' ? taskSets.pop() : false,
-		currentTaskSet,
+		currentTaskSet;
 
-		finish = function (err) {
+		console.log(taskSets);
+		console.log(callBack);
+
+		var finish = function (err) {
 			self._gulp.removeListener('task_stop', onTaskEnd);
 			self._gulp.removeListener('task_err', onError);
 			if (callBack) {
