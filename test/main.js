@@ -74,6 +74,14 @@ describe('runSequence', function() {
 		})
 	});
 
+	describe('Input Array Handling', function() {
+		it('should not modify passed-in parallel task arrays', function() {
+			var taskArray = ['task1', 'task2'];
+			runSequence(taskArray);
+			taskArray.should.eql(['task1', 'task2']);
+		});
+	});
+
 	describe('Asynchronous Tasks', function() {
 		it('should run a single task', function() {
 			task1.shouldPause = true;

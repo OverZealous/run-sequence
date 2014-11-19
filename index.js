@@ -34,7 +34,10 @@ function verifyTaskSets(gulp, taskSets, skipArrays) {
 }
 
 function runSequence(gulp) {
-	var taskSets = Array.prototype.slice.call(arguments, 1),
+	// Slice and dice the input to prevent modification of parallel arrays.
+	var taskSets = Array.prototype.slice.call(arguments, 1).map(function(task) {
+			return Array.isArray(task) ? task.slice() : task;
+		}),
 		callBack = typeof taskSets[taskSets.length-1] === 'function' ? taskSets.pop() : false,
 		currentTaskSet,
 
