@@ -34,7 +34,18 @@ function verifyTaskSets(gulp, taskSets, skipArrays) {
 }
 
 function runSequence(gulp) {
-	var taskSets = Array.prototype.slice.call(arguments, 1),
+	var runSequenceArgs = arguments,
+		taskSets = (function() {
+			var clonedTaskSets = [];
+			Array.prototype.slice.call(runSequenceArgs, 1).forEach(function(entry) {
+				if (Array.isArray(entry)) {
+					clonedTaskSets.push(JSON.parse(JSON.stringify(entry)));
+				} else {
+					clonedTaskSets.push(entry);
+				}
+			});
+			return clonedTaskSets;
+		}()),
 		callBack = typeof taskSets[taskSets.length-1] === 'function' ? taskSets.pop() : false,
 		currentTaskSet,
 

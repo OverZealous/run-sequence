@@ -71,7 +71,12 @@ describe('runSequence', function() {
 			task4.counter.should.eql(3);
 			//noinspection BadExpressionStatementJS
 			wasCalled.should.be.true;
-		})
+		});
+		it('should not change the passed task array', function() {
+			var taskArray = ['task1', 'task2'];
+			runSequence(taskArray);
+			taskArray.should.eql(['task1', 'task2']);
+		});
 	});
 
 	describe('Asynchronous Tasks', function() {
