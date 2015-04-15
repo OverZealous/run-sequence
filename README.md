@@ -1,6 +1,6 @@
 # run-sequence
 
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Support via Gratipay][gratipay-image]][gratipay-url]
 
 Runs a sequence of gulp tasks in the specified order.  This function is designed to solve the situation where you have defined run-order, but choose not to or cannot use dependencies.
 
@@ -88,9 +88,9 @@ var gulp = require('gulp'), // might be a different instance than the toplevel o
 
 ## Help Support This Project
 
-If you'd like to support this and other OverZealous Creations (Phil DeJarnett) projects, [donate via Gittip][gittip-url]!
+If you'd like to support this and other OverZealous Creations (Phil DeJarnett) projects, [donate via Gratipay][gratipay-url]!
 
-[![Support via Gittip][gittip-image]][gittip-url]
+[![Support via Gratipay][gratipay-image]][gratipay-url]
 
 ## LICENSE
 
@@ -103,5 +103,5 @@ If you'd like to support this and other OverZealous Creations (Phil DeJarnett) p
 [travis-url]: http://travis-ci.org/OverZealous/run-sequence
 [travis-image]: https://secure.travis-ci.org/OverZealous/run-sequence.png?branch=master
 
-[gittip-url]: https://www.gittip.com/OverZealous/
-[gittip-image]: https://raw2.github.com/OverZealous/gittip-badge/0.1.2/dist/gittip.png
+[gratipay-url]: https://www.gratipay.com/OverZealous/
+[gratipay-image]: https://img.shields.io/gratipay/OverZealous.svg
