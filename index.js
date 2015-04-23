@@ -34,6 +34,11 @@ function verifyTaskSets(gulp, taskSets, skipArrays) {
 }
 
 function runSequence(gulp) {
+	// load gulp directly when no external was passed
+	if(typeof gulp === 'undefined') {
+		gulp = require('gulp');
+	}
+
 	// Slice and dice the input to prevent modification of parallel arrays.
 	var taskSets = Array.prototype.slice.call(arguments, 1).map(function(task) {
 			return Array.isArray(task) ? task.slice() : task;
@@ -85,7 +90,7 @@ function runSequence(gulp) {
 	runNextSet();
 }
 
-module.exports = runSequence.bind(null, require('gulp'));
+module.exports = runSequence.bind(null, undefined);
 module.exports.use = function(gulp) {
 	return runSequence.bind(null, gulp);
 };
