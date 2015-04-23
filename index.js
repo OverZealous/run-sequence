@@ -35,7 +35,7 @@ function verifyTaskSets(gulp, taskSets, skipArrays) {
 
 function runSequence(gulp) {
 	// load gulp directly when no external was passed
-	if(typeof gulp === 'undefined') {
+	if(gulp === undefined) {
 		gulp = require('gulp');
 	}
 
