@@ -36,10 +36,5 @@
   "engines": {
     "node": ">= 0.8.0"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://github.com/OverZealous/run-sequence/raw/master/LICENSE"
-    }
-  ]
+  "license": "MIT"
 }
