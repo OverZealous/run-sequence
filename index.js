@@ -54,7 +54,7 @@ function runSequence(gulp) {
 			var error;
 			if (e && e.err) {
 				error = new gutil.PluginError('run-sequence', { 
-					message: 'An error occured in task "' + e.task + '".'
+					message: 'An error occured in task \'' + e.task + '\'.'
 				});
 			}
 			
