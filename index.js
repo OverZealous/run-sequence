@@ -50,8 +50,8 @@ function runSequence(gulp) {
 			gulp.removeListener('task_stop', onTaskEnd);
 			gulp.removeListener('task_err', onError);
 			if(callBack) {
-				callBack(e.err);
-			} else if(e.err) {
+				callBack(e && e.err ? e.err : undefined);
+			} else if(e && e.err) {
 				console.log(colors.red('Error running task sequence:'), e.err);
 			}
 		},
