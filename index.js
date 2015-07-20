@@ -46,13 +46,13 @@ function runSequence(gulp) {
 		callBack = typeof taskSets[taskSets.length-1] === 'function' ? taskSets.pop() : false,
 		currentTaskSet,
 
-		finish = function(err) {
+		finish = function(e) {
 			gulp.removeListener('task_stop', onTaskEnd);
 			gulp.removeListener('task_err', onError);
 			if(callBack) {
-				callBack(err);
-			} else if(err) {
-				console.log(colors.red('Error running task sequence:'), err);
+				callBack(e && e.err ? e.err : undefined);
+			} else if(e && e.err) {
+				console.log(colors.red('Error running task sequence:'), e.err);
 			}
 		},
 
