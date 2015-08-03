@@ -61,7 +61,7 @@ function runSequence(gulp) {
 			if(callBack) {
 				callBack(error);
 			} else if(error) {
-				console.log(colors.red(error.toString()));
+				gutil.log(colors.red(error.toString()));
 			}
 		},
 
