@@ -40,7 +40,7 @@ Then add use it in your gulpfile, like so:
 ```js
 var gulp = require('gulp');
 var runSequence = require('run-sequence');
-var clean = require('gulp-clean');
+var del = require('del');
 
 // This will run in this order:
 // * build-clean
@@ -58,9 +58,9 @@ gulp.task('build', function(callback) {
 // wish, but make sure they either return a stream or handle the callback
 // Example:
 
-gulp.task('build-clean', function() {
-    return gulp.src(BUILD_DIRECTORY).pipe(clean());
-//  ^^^^^^
+gulp.task('build-clean', function(callback) {
+    del([BUILD_DIRECTORY], callback);
+//                         ^^^^^^^^
 //   This is the key here, to make sure tasks run asynchronously!
 });
 
