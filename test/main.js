@@ -19,6 +19,9 @@ describe('runSequence', function() {
 	gulp.task('task2', task2);
 	gulp.task('task3', task3);
 	gulp.task('task4', ['task3'], task4);
+	gulp.task('errTask', function() {
+		throw new Error('Error Task');
+	});
 
 	beforeEach(function() {
 		simpleTask.resetRunCounter();
@@ -237,6 +240,18 @@ describe('runSequence', function() {
 			}).should.throw(/not configured/i);
 			shouldNotRunAnything();
 		});
+
+		it('should pass errors to the callback', function() {
+			var called = false;
+			(function() {
+				runSequence('task1', 'errTask', function(err) {
+					called = true;
+					should(err).be.ok;
+				});
+			}).should.throw(/Error Task/i);
+
+			called.should.eql(true);
+		})
 	});
 
 });
