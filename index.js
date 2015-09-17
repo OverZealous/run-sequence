@@ -3,6 +3,7 @@
 "use strict";
 
 var colors = require('chalk');
+var gutil = require('gulp-util');
 
 function verifyTaskSets(gulp, taskSets, skipArrays) {
 	if(taskSets.length === 0) {
@@ -49,10 +50,18 @@ function runSequence(gulp) {
 		finish = function(e) {
 			gulp.removeListener('task_stop', onTaskEnd);
 			gulp.removeListener('task_err', onError);
+			
+			var error;
+			if (e && e.err) {
+				error = new gutil.PluginError('run-sequence', { 
+					message: 'An error occured in task \'' + e.task + '\'.'
+				});
+			}
+			
 			if(callBack) {
-				callBack(e && e.err ? e.err : undefined);
-			} else if(e && e.err) {
-				console.log(colors.red('Error running task sequence:'), e.err);
+				callBack(error);
+			} else if(error) {
+				gutil.log(colors.red(error.toString()));
 			}
 		},
 
