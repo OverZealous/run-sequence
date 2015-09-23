@@ -6,9 +6,9 @@ Runs a sequence of gulp tasks in the specified order.  This function is designed
 
 > ### Please Note
 >
-> This is intended to be a temporary solution until [orchestrator](https://github.com/robrich/orchestrator/) is updated to support [non-dependent ordered tasks](https://github.com/robrich/orchestrator/issues/21).
+> This is intended to be a temporary solution until the release of [gulp 4.0](https://github.com/gulpjs/gulp/tree/4.0) which has support for defining task dependencies in [series](https://github.com/gulpjs/gulp/blob/4.0/docs/API.md#gulpseriestasks) or in [parallel](https://github.com/gulpjs/gulp/blob/4.0/docs/API.md#gulpparalleltasks).
 > 
-> Be aware that this solution is a hack, and may stop working with a future update to orchestrator. 
+> Be aware that this solution is a hack, and may stop working with a future update to gulp.
 
 Each argument to `run-sequence` is run in order.  This works by listening to the `task_stop` and `task_err` events, and keeping track of which tasks have been completed.  You can still run some of the tasks in parallel, by providing an array of task names for one or more of the arguments.
 
