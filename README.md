@@ -59,8 +59,10 @@ gulp.task('build', function(callback) {
 // Example:
 
 gulp.task('build-clean', function(callback) {
-    del([BUILD_DIRECTORY], callback);
-//                         ^^^^^^^^
+    del([BUILD_DIRECTORY]).then(function(){
+        callback();
+    });
+//      ^^^^^^^^
 //   This is the key here, to make sure tasks run asynchronously!
 });
 
