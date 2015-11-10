@@ -59,9 +59,15 @@ gulp.task('build', function(callback) {
 // Example:
 
 gulp.task('build-clean', function(callback) {
-    del([BUILD_DIRECTORY], callback);
-//                         ^^^^^^^^
+    del([BUILD_DIRECTORY]).then(function(deletedFiles){
+        console.log('cleaned up: ', deletedFiles);
+        callback();
+    });
+//                              ^^^^^^^^
 //   This is the key here, to make sure tasks run asynchronously!
+//   note: the del module does not take a callback anymore. We need to use the promise syntax.
+//         in addition, just passing a callback directly into then doesn't work, since the 
+//         the contact is different. Need to wrap the callback with an anonymous function.
 });
 
 gulp.task('build-scripts', function() {
