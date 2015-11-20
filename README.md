@@ -1,6 +1,6 @@
 # run-sequence
 
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Support via Gratipay][gratipay-image]][gratipay-url]
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
 
 Runs a sequence of gulp tasks in the specified order.  This function is designed to solve the situation where you have defined run-order, but choose not to or cannot use dependencies.
 
@@ -35,12 +35,13 @@ First, install `run-sequence` as a development dependency:
 npm install --save-dev run-sequence
 ```
 
-Then add use it in your gulpfile, like so:
+Then add use it in your gulpfile, like so (note these are only examples, please check the documentation for your functions for the correct way to use them):
 
 ```js
 var gulp = require('gulp');
 var runSequence = require('run-sequence');
 var del = require('del');
+var fs = require('fs');
 
 // This will run in this order:
 // * build-clean
@@ -54,20 +55,32 @@ gulp.task('build', function(callback) {
               callback);
 });
 
-// configure build-clean, build-scripts, build-styles, build-html as you
-// wish, but make sure they either return a stream or handle the callback
+// configure build-clean, build-scripts, build-styles, build-html as you wish,
+// but make sure they either return a stream or promise, or handle the callback
 // Example:
 
-gulp.task('build-clean', function(callback) {
-    del([BUILD_DIRECTORY], callback);
-//                         ^^^^^^^^
-//   This is the key here, to make sure tasks run asynchronously!
+gulp.task('build-clean', function() {
+    // Return the Promise from del()
+    return del([BUILD_DIRECTORY]);
+//  ^^^^^^
+//   This is the key here, to make sure asynchronous tasks are done!
 });
 
 gulp.task('build-scripts', function() {
+    // Return the stream from gulp
     return gulp.src(SCRIPTS_SRC).pipe(...)...
 //  ^^^^^^
-//   This is the key here, to make sure tasks run asynchronously!
+//   This is the key here, to make sure tasks run to completion!
+});
+
+gulp.task('callback-example', function(callback) {
+    // Use the callback in the async function
+    fs.readFile('...', function(err, file) {
+        console.log(file);
+        callback();
+//      ^^^^^^^^^^
+//       This is what lets gulp know this task is complete!
+    });
 });
 ```
 
@@ -79,18 +92,12 @@ If you have a complex gulp setup with your tasks split up across different files
 // submodule tasks/mygulptask.js
 
 var gulp = require('gulp'), // might be a different instance than the toplevel one
-	// this uses the gulp you provide
+    // this uses the gulp you provide
     runSequence = require('run-sequence').use(gulp);
     
     // ...and then use normally
     runSequence('subtask1', 'subtask2');
 ```
-
-## Help Support This Project
-
-If you'd like to support this and other OverZealous Creations (Phil DeJarnett) projects, [donate via Gratipay][gratipay-url]!
-
-[![Support via Gratipay][gratipay-image]][gratipay-url]
 
 ## LICENSE
 
