@@ -195,6 +195,23 @@ describe('runSequence', function() {
 		task4.counter.should.eql(-1);
 	}
 
+	describe('Clean non valid tasks', function() {
+		it('should ignore non valid tasks', function() {
+			(function() {
+				runSequence(false, 'task1', undefined, null);
+			}).should.not.throw();
+			task1.counter.should.eql(1);
+		});
+
+		it('should ignore non valid tasks as part of a task-list', function() {
+			(function() {
+				runSequence(false, 'task1', [false, 'task2']);
+			}).should.not.throw();
+			task1.counter.should.eql(1);
+			task2.counter.should.eql(2);
+		});
+	});
+
 	describe('Error Handling', function() {
 		it('should error if no tasks are provided', function() {
 			(function() {
@@ -203,9 +220,23 @@ describe('runSequence', function() {
 			shouldNotRunAnything();
 		});
 
+		it('should error if non valid tasks are provided', function() {
+			(function() {
+				runSequence(null, undefined, false);
+			}).should.throw(/no tasks/i);
+			shouldNotRunAnything();
+		});
+
+		it('should error if non valid tasks are provided as part of a task-list', function() {
+			(function() {
+				runSequence(null, undefined, false);
+			}).should.throw(/no tasks/i);
+			shouldNotRunAnything();
+		});
+
 		it('should error if a non-string task is provided', function() {
 			(function() {
-				runSequence(null);
+				runSequence(true);
 			}).should.throw(/not a valid task string/i);
 			shouldNotRunAnything();
 		});
@@ -220,10 +251,7 @@ describe('runSequence', function() {
 		it('should error if an empty task-list is provided', function() {
 			(function() {
 				runSequence([]);
-			}).should.throw();
-			(function() {
-				runSequence('task1', []);
-			}).should.throw(/empty array/i);
+			}).should.throw(/no tasks/i);
 			shouldNotRunAnything();
 		});
 

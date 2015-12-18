@@ -5,6 +5,27 @@
 var colors = require('chalk');
 var gutil = require('gulp-util');
 
+/**
+ * Remove false or undefined task
+ * Allow writing some runSequence(expr && 'conditionalTask')
+ */
+function cleanTaskSets(taskSets) {
+	var cleanedTaskSets = [];
+	taskSets.forEach(function(t) {
+		if (t) {
+			if (Array.isArray(t)) {
+				var newArray = cleanTaskSets(t);
+				if (newArray.length > 0) {
+					cleanedTaskSets.push(newArray);
+				}
+			} else {
+				cleanedTaskSets.push(t);
+			}
+		}
+	});
+	return cleanedTaskSets;
+}
+
 function verifyTaskSets(gulp, taskSets, skipArrays) {
 	if(taskSets.length === 0) {
 		throw new Error('No tasks were provided to run-sequence');
@@ -50,14 +71,14 @@ function runSequence(gulp) {
 		finish = function(e) {
 			gulp.removeListener('task_stop', onTaskEnd);
 			gulp.removeListener('task_err', onError);
-			
+
 			var error;
 			if (e && e.err) {
-				error = new gutil.PluginError('run-sequence', { 
+				error = new gutil.PluginError('run-sequence', {
 					message: 'An error occured in task \'' + e.task + '\'.'
 				});
 			}
-			
+
 			if(callBack) {
 				callBack(error);
 			} else if(error) {
@@ -91,6 +112,7 @@ function runSequence(gulp) {
 			}
 		};
 
+	taskSets = cleanTaskSets(taskSets);
 	verifyTaskSets(gulp, taskSets);
 
 	gulp.on('task_stop', onTaskEnd);
