@@ -1,7 +1,7 @@
 {
   "name": "run-sequence",
   "description": "Run a series of dependent gulp tasks in order",
-  "version": "1.1.5",
+  "version": "1.2.0",
   "homepage": "https://github.com/OverZealous/run-sequence",
   "repository": {
     "type": "git",
