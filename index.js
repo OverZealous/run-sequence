@@ -53,7 +53,7 @@ function runSequence(gulp) {
 			
 			var error;
 			if (e && e.err) {
-				error = new gutil.PluginError('run-sequence(' + e.task + ')', e, {showStack: true});
+				error = new gutil.PluginError('run-sequence(' + e.task + ')', e.err, {showStack: true});
 			}
 			
 			if(callBack) {
