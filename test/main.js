@@ -72,9 +72,8 @@ describe('runSequence', function() {
 			task2.counter.should.eql(-1);
 			task3.counter.should.eql(2);
 			task4.counter.should.eql(3);
-			//noinspection BadExpressionStatementJS
-			wasCalled.should.be.true;
-		})
+			wasCalled.should.be.true();
+		});
 	});
 
 	describe('Input Array Handling', function() {
@@ -246,12 +245,12 @@ describe('runSequence', function() {
 			(function() {
 				runSequence('task1', 'errTask', function(err) {
 					called = true;
-					should(err).be.ok;
+					should(err).be.ok();
 				});
 			}).should.throw(/Error Task/i);
 
 			called.should.eql(true);
-		})
+		});
 	});
 
 });
