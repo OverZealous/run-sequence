@@ -8,5 +8,5 @@ components
 .idea
 temp.txt*
 test
-yarn.locky
+yarn.lock
 
