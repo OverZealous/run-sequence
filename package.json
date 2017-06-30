@@ -23,13 +23,13 @@
     "orchestrator"
   ],
   "dependencies": {
-    "chalk": "*",
-    "gulp-util": "*"
+    "chalk": "^1.1.3",
+    "gulp-util": "^3.0.8"
   },
   "devDependencies": {
-    "gulp": "*",
-    "mocha": "*",
-    "should": "*"
+    "gulp": "^3.9.1",
+    "mocha": "^3.4.2",
+    "should": "~11.2.0"
   },
   "scripts": {
     "test": "mocha --reporter spec"
