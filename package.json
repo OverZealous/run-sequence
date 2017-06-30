@@ -23,7 +23,7 @@
     "orchestrator"
   ],
   "dependencies": {
-    "chalk": "*",
+    "chalk": "^1.1.3",
     "gulp-util": "*"
   },
   "devDependencies": {
