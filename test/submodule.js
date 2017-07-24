@@ -1,7 +1,7 @@
-var _gulp = require('gulp'),
-	gulp = new _gulp.Gulp(),
-	simpleTask = require('./simpleTask'),
-	runSequence = require('../').use(gulp);
+var _gulp = require('gulp');
+var gulp = new _gulp.Gulp();
+var simpleTask = require('./simpleTask');
+var runSequence = require('../').use(gulp);
 
 var subtask = simpleTask();
 

@@ -4,28 +4,25 @@
 
 Runs a sequence of gulp tasks in the specified order.  This function is designed to solve the situation where you have defined run-order, but choose not to or cannot use dependencies.
 
-> ### Please Note
+> ### Is your company hiring Node developers?
 >
-> This is intended to be a temporary solution until the release of [gulp 4.0](https://github.com/gulpjs/gulp/tree/4.0) which has support for defining task dependencies in [series](https://github.com/gulpjs/gulp/blob/4.0/docs/API.md#gulpseriestasks) or in [parallel](https://github.com/gulpjs/gulp/blob/4.0/docs/API.md#gulpparalleltasks).
-> 
-> Be aware that this solution is a hack, and may stop working with a future update to gulp.
+> If you are hiring developers, you can support this project and future open source work by checking out our company, [Qualified.io](https://www.qualified.io/?utm_source=run-sequence).
+>
+> Qualified is a service for online skills-assessment that can help you easily vet developers across a wide range of real-world programming skills.
+>
+> Please help support this project, and [sign up for a free trial](https://www.qualified.io/?utm_source=run-sequence).
+
+
 
 Each argument to `run-sequence` is run in order.  This works by listening to the `task_stop` and `task_err` events, and keeping track of which tasks have been completed.  You can still run some of the tasks in parallel, by providing an array of task names for one or more of the arguments.
 
 If the final argument is a function, it will be used as a callback after all the functions are either finished or an error has occurred.
 
-## Possible Breaking Change in version 1.0.0
-
-In version 1.0 I've added a check that prevents the same task from showing up within any sequence.  This is to help reduce typo errors, as well as prevent the [silent exit bug when the same task occurred twice in a parallel sequence](https://github.com/OverZealous/run-sequence/issues/13).  The sequence will now fail immediately during the validation stage.
-
-If this breaking change affects you, you'll need to take one of several actions:
-
-1. Remove duplicate tasks if they are a mistake.
-2. Filter unneeded duplicate tasks before passing them to `run-sequence`.
-3. Rewrite your tasks or wrap your tasks within functions that can be called multiple times if for some reason you rely on this functionality.
-4. Continue using `run-sequence` version 0.3.7 if it was working for you.
-
-[I welcome feedback](https://github.com/OverZealous/run-sequence/issues) if this change is a problem for your setup!
+> **Please Note**
+>
+> This was intended to be a temporary solution until the release of gulp 4.0 which should have support for defining task dependencies similarly.
+> 
+> Given that Gulp 4 appears to never be fully released, take that for what you will. Be aware that this solution is a hack, and may stop working with a future update to gulp.
 
 ## Usage
 
@@ -99,6 +96,27 @@ var gulp = require('gulp'), // might be a different instance than the toplevel o
     runSequence('subtask1', 'subtask2');
 ```
 
+## Options
+
+There are a few global options you can configure on the `runSequence` function.
+
+Please note these are **global to the module**, and once set will affect every use of `runSequence`.
+
+Usage:
+
+```js
+var runSequence = require('run-sequence');
+runSequence.options.ignoreUndefinedTasks = true;
+gulp.task('task', function(cb) {
+	runSequence('foo', null, 'bar'); // no longer errors on `null`
+})
+```
+
+- `showErrorStackTrace`: When set to `false`, this suppresses the full stack trace from errors captured during a sequence.
+- `ignoreUndefinedTasks`: When set to `true`, this enables you to pass falsey values in which will be stripped from the task set before validation and sequencing.
+
+
+
 ## LICENSE
 
 [MIT License](http://en.wikipedia.org/wiki/MIT_License)
@@ -109,6 +127,3 @@ var gulp = require('gulp'), // might be a different instance than the toplevel o
 
 [travis-url]: http://travis-ci.org/OverZealous/run-sequence
 [travis-image]: https://secure.travis-ci.org/OverZealous/run-sequence.png?branch=master
-
-[gratipay-url]: https://www.gratipay.com/OverZealous/
-[gratipay-image]: https://img.shields.io/gratipay/OverZealous.svg

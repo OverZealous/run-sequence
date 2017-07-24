@@ -2,18 +2,26 @@
 /* global describe, it, beforeEach */
 'use strict';
 
-var runSequence = require('../'),
-	gulp = require('gulp'),
-	should = require('should'),
-	simpleTask = require('./simpleTask'),
-	submodule = require('./submodule');
+var runSequence = require('../');
+var gulp = require('gulp');
+var should = require('should');
+var simpleTask = require('./simpleTask');
+var submodule = require('./submodule');
 require('mocha');
 
+function extend(copy, obj) {
+	copy = copy || {};
+	Object.keys(obj).forEach(function(k) {
+		copy[k] = obj[k];
+	});
+	return copy;
+}
+
 describe('runSequence', function() {
-	var task1 = simpleTask(),
-		task2 = simpleTask(),
-		task3 = simpleTask(),
-		task4 = simpleTask();
+	var task1 = simpleTask();
+	var task2 = simpleTask();
+	var task3 = simpleTask();
+	var task4 = simpleTask();
 
 	gulp.task('task1', task1);
 	gulp.task('task2', task2);
@@ -252,6 +260,19 @@ describe('runSequence', function() {
 
 			called.should.eql(true);
 		})
+	});
+
+	describe('Options', function() {
+		var defaultOptions = extend({}, runSequence.options);
+		afterEach(function() {
+			extend(runSequence.options, defaultOptions);
+		});
+		it('should ignore empty errors when configured', function() {
+			runSequence.options.ignoreUndefinedTasks = true;
+			runSequence('task1', null, undefined, 'task2');
+			task1.counter.should.eql(1);
+			task2.counter.should.eql(2);
+		});
 	});
 
 });
