@@ -26,7 +26,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Now passes the error back to GulpUtil.PluginError
 
-## [1.0.0](https://github.com/OverZealous/run-sequence/releases/tag/v1.0.0) - ???
+-----
+
+_1, 2, skip a few…_
+
+-----
+
+## [1.0.0](https://github.com/OverZealous/run-sequence/releases/tag/v1.0.0) - 2014-09-29
 
 ### Possible Breaking Change in version 1.0.0
 
