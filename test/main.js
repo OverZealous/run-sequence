@@ -260,6 +260,40 @@ describe('runSequence', function() {
 
 			called.should.eql(true);
 		})
+
+		it('should pass error if gulp execution halted in second execution', function(done) {
+			const stopTask = gulp.task('stopTask', function() {
+				if (stopTask.shouldStop) {
+					gulp.stop();
+				}
+			});
+
+			stopTask.shouldStop = false;
+
+			var outerTask = gulp.task('outerTask', function(cb) {
+				runSequence('task2', ['stopTask', 'task3'], function(err) {
+					if (stopTask.shouldStop) {
+						try {
+							should(err).be.ok;
+							err.message.should.equal('orchestration aborted');
+						} catch (e) {
+							cb();
+							return done(e);
+						}
+						cb();
+						done();
+					} else {
+						cb();
+					}
+				});
+			});
+
+			gulp.start('outerTask', function() {
+				stopTask.shouldStop = true;
+				task3.shouldPause = true;
+				gulp.start('outerTask');
+			});
+		})
 	});
 
 	describe('Options', function() {

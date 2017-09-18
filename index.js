@@ -54,6 +54,8 @@ function runSequence(gulp) {
 	var callBack = typeof taskSets[taskSets.length - 1] === 'function' ? taskSets.pop() : false;
 	var currentTaskSet;
 
+	var finished;
+
 	if(options().ignoreUndefinedTasks) {
 		// ignore missing tasks
 		taskSets = filterArray(taskSets)
@@ -67,8 +69,11 @@ function runSequence(gulp) {
 	}
 
 	function finish(e) {
+		if (finished) return;
+
 		gulp.removeListener('task_stop', onTaskEnd);
 		gulp.removeListener('task_err', onError);
+		gulp.removeListener('err', onGulpError);
 
 		var error;
 		if(e && e.err) {
@@ -96,6 +101,12 @@ function runSequence(gulp) {
 		}
 	}
 
+	function onGulpError(e) {
+		if (e.message === 'orchestration aborted') {
+			finish(e);
+		}
+	};
+
 	function runNextSet() {
 		if(taskSets.length) {
 			var command = taskSets.shift();
@@ -113,6 +124,7 @@ function runSequence(gulp) {
 
 	gulp.on('task_stop', onTaskEnd);
 	gulp.on('task_err', onError);
+	gulp.on('err', onGulpError);
 
 	runNextSet();
 }
