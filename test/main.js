@@ -263,7 +263,7 @@ describe('runSequence', function() {
 
 		it('should pass error if gulp execution halted in second execution', function(done) {
 			var stopTask = gulp.task('stopTask', function() {
-				if (stopTask.shouldStop) {
+				if(stopTask.shouldStop) {
 					gulp.stop();
 				}
 			});
