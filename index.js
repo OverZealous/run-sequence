@@ -54,6 +54,8 @@ function runSequence(gulp) {
 	var callBack = typeof taskSets[taskSets.length - 1] === 'function' ? taskSets.pop() : false;
 	var currentTaskSet;
 
+	var finished;
+
 	if(options().ignoreUndefinedTasks) {
 		// ignore missing tasks
 		taskSets = filterArray(taskSets)
@@ -67,8 +69,12 @@ function runSequence(gulp) {
 	}
 
 	function finish(e) {
+		if(finished) return;
+		finished = true;
+
 		gulp.removeListener('task_stop', onTaskEnd);
 		gulp.removeListener('task_err', onError);
+		gulp.removeListener('err', onGulpError);
 
 		var error;
 		if(e && e.err) {
@@ -96,6 +102,17 @@ function runSequence(gulp) {
 		}
 	}
 
+	function onGulpError(e) {
+		// In the case that you call gulp.stop after a successful run,
+		// we will not recieve a task_err or task_stop event. This callback
+		// will finish the run sequence execution in case of an 'orchestration aborted'
+		// even coming from gulp's global error handler. That event is fired in when
+		// gulp.stop is called.
+		if(e.message === 'orchestration aborted') {
+			finish(e);
+		}
+	};
+
 	function runNextSet() {
 		if(taskSets.length) {
 			var command = taskSets.shift();
@@ -113,6 +130,7 @@ function runSequence(gulp) {
 
 	gulp.on('task_stop', onTaskEnd);
 	gulp.on('task_err', onError);
+	gulp.on('err', onGulpError);
 
 	runNextSet();
 }
