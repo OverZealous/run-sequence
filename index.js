@@ -70,6 +70,7 @@ function runSequence(gulp) {
 
 	function finish(e) {
 		if (finished) return;
+		finished = true;
 
 		gulp.removeListener('task_stop', onTaskEnd);
 		gulp.removeListener('task_err', onError);
@@ -107,7 +108,7 @@ function runSequence(gulp) {
 		// will finish the run sequence execution in case of an 'orchestration aborted'
 		// even coming from gulp's global error handler. That event is fired in when
 		// gulp.stop is called.
-		if (e.message === 'orchestration aborted') {
+		if(e.message === 'orchestration aborted') {
 			finish(e);
 		}
 	};

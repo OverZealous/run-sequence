@@ -262,7 +262,7 @@ describe('runSequence', function() {
 		})
 
 		it('should pass error if gulp execution halted in second execution', function(done) {
-			const stopTask = gulp.task('stopTask', function() {
+			var stopTask = gulp.task('stopTask', function() {
 				if (stopTask.shouldStop) {
 					gulp.stop();
 				}
@@ -272,11 +272,11 @@ describe('runSequence', function() {
 
 			var outerTask = gulp.task('outerTask', function(cb) {
 				runSequence('task2', ['stopTask', 'task3'], function(err) {
-					if (stopTask.shouldStop) {
+					if(stopTask.shouldStop) {
 						try {
 							should(err).be.ok;
 							err.message.should.equal('orchestration aborted');
-						} catch (e) {
+						} catch(e) {
 							cb();
 							return done(e);
 						}
