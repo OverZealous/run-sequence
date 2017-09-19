@@ -69,7 +69,7 @@ function runSequence(gulp) {
 	}
 
 	function finish(e) {
-		if (finished) return;
+		if(finished) return;
 		finished = true;
 
 		gulp.removeListener('task_stop', onTaskEnd);
