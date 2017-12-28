@@ -3,7 +3,8 @@
 "use strict";
 
 var colors = require('chalk');
-var gutil = require('gulp-util');
+var fancyLog = require('fancy-log');
+var PluginError = require('plugin-error');
 
 function options() { return module.exports.options }
 
@@ -78,13 +79,13 @@ function runSequence(gulp) {
 
 		var error;
 		if(e && e.err) {
-			error = new gutil.PluginError('run-sequence(' + e.task + ')', e.err, { showStack: options().showErrorStackTrace });
+			error = new PluginError('run-sequence(' + e.task + ')', e.err, { showStack: options().showErrorStackTrace });
 		}
 
 		if(callBack) {
 			callBack(error);
 		} else if(error) {
-			gutil.log(colors.red(error.toString()));
+			fancyLog(colors.red(error.toString()));
 		}
 	}
 
