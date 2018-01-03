@@ -6,3 +6,5 @@ build
 components
 *.orig
 .idea
+package-lock.json
+

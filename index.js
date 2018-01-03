@@ -1,9 +1,17 @@
 /*jshint node:true */
 
+//2018-01-02 sc mod: gulp-util deprecation
+//2018-01-02 sc mod: require plugin-error to replace gutil.PluginError
+//2018-01-02 sc mod: require fancy-log to replace gutil.log
+
 "use strict";
 
 var colors = require('chalk');
-var gutil = require('gulp-util');
+//sc mod start
+//var gutil = require('gulp-util');
+var pulginError = require('plugin-error');
+var log = require('fancy-log');
+//sc mod stop
 
 function options() { return module.exports.options }
 
@@ -78,13 +86,19 @@ function runSequence(gulp) {
 
 		var error;
 		if(e && e.err) {
-			error = new gutil.PluginError('run-sequence(' + e.task + ')', e.err, { showStack: options().showErrorStackTrace });
+			//sc mod start
+			//error = new gutil.PluginError('run-sequence(' + e.task + ')', e.err, { showStack: options().showErrorStackTrace });
+			error = new pulginError('run-sequence(' + e.task + ')', e.err, { showStack: options().showErrorStackTrace });
+			//sc mod stop
 		}
 
 		if(callBack) {
 			callBack(error);
 		} else if(error) {
-			gutil.log(colors.red(error.toString()));
+			//sc mod start
+			//gutil.log(colors.red(error.toString()));
+			log(colors.red(error.toString()));
+			//sc mod stop
 		}
 	}
 
