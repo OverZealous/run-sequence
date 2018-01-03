@@ -24,6 +24,7 @@
   ],
   "dependencies": {
     "chalk": "^1.1.3",
+    "fancy-log": "^1.3.2",
     "gulp-util": "^3.0.8",
     "plugin-error": "^0.1.2"
   },
